@@ -16,9 +16,11 @@ const login = async (req, res) => {
     if (!manufacturer.length && !retailer.length && !supplier.length) {
         return res.status(404).send("User not found");
     }
-    console.log(user);
+    
     try {
         if (email == manufacturer[0].email) {
+            const user = manufacturer;
+            console.log(user);
 
             if (user[0].password !== password) {
                 return res.status(401).send("Invalid credentials");
@@ -43,6 +45,8 @@ const login = async (req, res) => {
             });
         }
         else if(email == retailer[0].email){
+            const user = retailer;
+            console.log(user);
             if (user[0].password !== password) {
                 return res.status(401).send("Invalid credentials");
             }
@@ -66,6 +70,8 @@ const login = async (req, res) => {
             });
         }
         else{
+            const user = supplier;
+            console.log(user);
             if (user[0].password !== password) {
                 return res.status(401).send("Invalid credentials");
             }

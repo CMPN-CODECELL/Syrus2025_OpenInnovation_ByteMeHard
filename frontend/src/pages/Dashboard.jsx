@@ -182,7 +182,7 @@ function Dashboard() {
         {/* Top Bar */}
         <div className={`flex flex-col md:flex-row md:items-center md:justify-between mb-8 border-b ${borderClass} pb-4`}>
           <h2 className={`text-2xl font-bold ${textClass} transition-transform duration-300 transform hover:scale-105`}>
-            Dashboard
+            Manufacturer Dashboard
           </h2>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Custom toggle switch placed on the right */}

@@ -4,7 +4,8 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const crypto = require("crypto");
 // const TestRouter = require("./routes/test");
-// const LoginRouter = require("./routes/login");
+const LoginRouter = require("./routes/login");
+const ResgisterRouter = require('./routes/register')
 // const SignupRouter = require("./routes/signup");
 // const LogoutRouter = require("./routes/logout");
 // const NewProductRouter = require("./routes/new_product");
@@ -21,7 +22,7 @@ const cookieParser = require("cookie-parser");
 const Razorpay = require("razorpay");
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // Database Connection
 connectDB();
@@ -42,7 +43,8 @@ app.use(
 
 // Routes
 // app.use("/api/test", TestRouter);
-// app.use("/api/login", LoginRouter);
+app.use("/api/login", LoginRouter);
+app.use("/api/register", ResgisterRouter);
 // app.use("/api/signup", SignupRouter);
 // app.use("/api/logout", LogoutRouter);
 // app.use("/api/product", NewProductRouter);
