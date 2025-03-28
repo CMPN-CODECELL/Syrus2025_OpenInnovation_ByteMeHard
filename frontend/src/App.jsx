@@ -10,11 +10,13 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        {/* <Route path="/" element={<Landing />} /> */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/producer" element={<Producer />} />
         <Route path="/retailer" element={<Retailer />} />
-
+        <Route path="/login" element={<Login />} />
+        <Route path="/list_products" element={<List_products />} />
+        {/* Add more routes as needed */}
       </Routes>
     </Router>
   );
