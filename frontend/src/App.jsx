@@ -8,7 +8,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        {/* <Route path="/" element={<Landing />} /> */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/producer" element={<Producer />} />
 
