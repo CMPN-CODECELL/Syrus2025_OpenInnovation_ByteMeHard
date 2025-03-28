@@ -3,18 +3,19 @@ import Dashboard from "./pages/Dashboard"; // Create this component
 import Producer from "./pages/Producer";
 import Retailer from "./pages/Retailer";
 import Login from "./pages/Login";
-import List_products from "./pages/List_products";
-
+import Payment from "./Payment";
+import UserDashboard from "./pages/UserDashboard";
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/payment" element={<Payment />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/producer" element={<Producer />} />
         <Route path="/retailer" element={<Retailer />} />
-
+        <Route path="/negogiate" element={<UserDashboard />} />
       </Routes>
     </Router>
   );
