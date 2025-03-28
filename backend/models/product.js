@@ -13,6 +13,9 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    details :{
+      type:String,
+    },
     manufacturer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Manufacturer",

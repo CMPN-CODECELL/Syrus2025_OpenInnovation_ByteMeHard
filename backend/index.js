@@ -20,6 +20,8 @@ const negotiationRouter = require("./routes/negotiation");
 // const GetPostRouter = require("./routes/GetPost.route");
 const cookieParser = require("cookie-parser");
 const Razorpay = require("razorpay");
+const getProducerRouter = require("./routes/get_producer_negotiation");
+const negogiationRetailerRouter = require("./routes/negiotiationRetailer");
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
@@ -48,6 +50,7 @@ app.use("/api/register", ResgisterRouter);
 // app.use("/api/signup", SignupRouter);
 // app.use("/api/logout", LogoutRouter);
 app.use("/api/product", NewProductRouter);
+app.use("/api/retailnego", negogiationRetailerRouter);
 // app.use("/api/supplier", router);
 // app.use("/api/raw_material", RawMaterialRouter);
 // app.use("/api/transaction", transactionRouter);
@@ -56,7 +59,7 @@ app.use("/api/product", NewProductRouter);
 app.use("/api/negotiate", negotiationRouter);
 // app.use("/api/posts", AddPostRouter);
 // app.use("/api/posts", GetPostRouter);
-
+app.use("/api", getProducerRouter);
 // MongoDB connection
 // mongoose.connect(process.env.MONGODB_URI)
 // .then(() => console.log('Connected to MongoDB'))

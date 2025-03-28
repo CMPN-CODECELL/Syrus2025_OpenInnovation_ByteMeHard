@@ -1,14 +1,14 @@
 // Producer.jsx
 import React, { useState, useEffect } from 'react';
-import { 
-  Menu, 
-  ChevronRight, 
-  ArrowUpRight, 
-  Bell, 
-  User 
+import {
+  Menu,
+  ChevronRight,
+  ArrowUpRight,
+  Bell,
+  User
 } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
-
+import axios from "axios";
 function Producer() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState('dark');
@@ -20,6 +20,26 @@ function Producer() {
   const [location, setLocation] = useState('');
   const [searchSubmitted, setSearchSubmitted] = useState(false);
   const [selectedProducer, setSelectedProducer] = useState(null); // For modal
+
+
+
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        requirements,
+        rawMaterial,
+        selectedRequirements,
+        budget,
+        capacity,
+        location,
+      };
+
+      const response = await axios.post('https://your-api-endpoint.com/data', payload);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error sending data:', error);
+    }
+  };
 
   // On mount, load saved theme
   useEffect(() => {
@@ -51,32 +71,68 @@ function Producer() {
   const sidebarText = theme === 'dark' ? 'text-white' : 'text-black';
 
   // Dummy data for producer cards
-  const producers = [
-    { 
-      id: 1, 
-      name: 'Producer One', 
-      details: 'Experienced in electronics manufacturing. Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 
-      image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
-      cost: '$200',
-      quantity: '5000 units'
-    },
-    { 
-      id: 2, 
-      name: 'Producer Two', 
-      details: 'Specializes in home appliances. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
-      cost: '$150',
-      quantity: '3000 units'
-    },
-    { 
-      id: 3, 
-      name: 'Producer Three', 
-      details: 'Expert in custom metal fabrication. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.',
-      image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
-      cost: '$250',
-      quantity: '7000 units'
-    },
-  ];
+  // const producers = [
+  //   {
+  //     id: 1,
+  //     name: 'Producer One',
+  //     details: 'Experienced in electronics manufacturing. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  //     image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
+  //     cost: '$200',
+  //     quantity: '5000 units'
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Producer Two',
+  //     details: 'Specializes in home appliances. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  //     image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
+  //     cost: '$150',
+  //     quantity: '3000 units'
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Producer Three',
+  //     details: 'Expert in custom metal fabrication. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.',
+  //     image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
+  //     cost: '$250',
+  //     quantity: '7000 units'
+  //   },
+  // ];
+
+
+  const [producers, setProducers] = useState([]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND}/api/getproducernegotiation`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      const mappedProducers = response.data.map((producer, index) => ({
+        id: producer._id || index + 1,
+        name: producer.productName || "Unknown Producer",
+        details: producer.details || "No details available.",
+        image: producer.imageUrl || "https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150",
+        cost: `$${producer.budget || 0}`,
+        quantity: `${producer.productQuantity || 0} units`,
+      }));
+
+      console.log("Mapped Producers:", mappedProducers);
+      setProducers(mappedProducers);
+    } catch (error) {
+      console.error("Error fetching producers:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
 
   // Requirement options (example values)
   const requirementOptions = ["High Quality", "Fast Delivery", "Low Cost", "Eco-Friendly", "Custom Design"];
@@ -200,7 +256,7 @@ function Producer() {
       `}</style>
 
       {/* Sidebar */}
-      <Sidebar 
+      <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         theme={theme}
@@ -211,7 +267,7 @@ function Producer() {
       />
 
       {/* Mobile Menu Button */}
-      <button 
+      <button
         onClick={() => setIsSidebarOpen(true)}
         className={`md:hidden fixed top-4 right-4 z-40 p-2 ${bgClass} rounded-full shadow hover:shadow-xl transition-shadow duration-300 border ${borderClass} transform hover:scale-110`}
       >
@@ -220,7 +276,7 @@ function Producer() {
 
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -235,10 +291,10 @@ function Producer() {
           </h2>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <label className="switch">
-              <input 
-                type="checkbox" 
-                checked={theme === 'light'} 
-                onChange={toggleTheme} 
+              <input
+                type="checkbox"
+                checked={theme === 'light'}
+                onChange={toggleTheme}
               />
               <span className="slider"></span>
             </label>
@@ -259,9 +315,9 @@ function Producer() {
               {/* Requirements field with options */}
               <div>
                 <label className={`block mb-2 ${textClass}`} htmlFor="requirements">Requirements</label>
-                <input 
-                  type="text" 
-                  id="requirements" 
+                <input
+                  type="text"
+                  id="requirements"
                   value={requirements}
                   onChange={(e) => setRequirements(e.target.value)}
                   placeholder="Describe your requirements..."
@@ -269,8 +325,8 @@ function Producer() {
                 />
                 <div className="mt-3 flex flex-wrap gap-3">
                   {requirementOptions.map((option, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       onClick={() => handleAddRequirement(option)}
                       className={`cursor-pointer px-3 py-1 border ${borderClass} rounded-full ${buttonHoverBg} ${textClass} transition-all duration-300 hover:scale-105`}
                     >
@@ -283,9 +339,9 @@ function Producer() {
               {/* Raw Material Field */}
               <div>
                 <label className={`block mb-2 ${textClass}`} htmlFor="rawMaterial">Raw Material</label>
-                <input 
-                  type="text" 
-                  id="rawMaterial" 
+                <input
+                  type="text"
+                  id="rawMaterial"
                   value={rawMaterial}
                   onChange={(e) => setRawMaterial(e.target.value)}
                   placeholder="Specify raw materials..."
@@ -296,11 +352,11 @@ function Producer() {
               {/* Budget Slider */}
               <div>
                 <label className={`block mb-2 ${textClass}`} htmlFor="budget">Budget (${budget})</label>
-                <input 
-                  type="range" 
-                  id="budget" 
-                  min="1000" 
-                  max="10000" 
+                <input
+                  type="range"
+                  id="budget"
+                  min="1000"
+                  max="10000"
                   step="500"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
@@ -311,9 +367,9 @@ function Producer() {
               {/* Production Capacity */}
               <div>
                 <label className={`block mb-2 ${textClass}`} htmlFor="capacity">Production Capacity</label>
-                <input 
-                  type="number" 
-                  id="capacity" 
+                <input
+                  type="number"
+                  id="capacity"
                   value={capacity}
                   onChange={(e) => setCapacity(e.target.value)}
                   placeholder="e.g., 1000 units/month"
@@ -324,9 +380,9 @@ function Producer() {
               {/* Location */}
               <div>
                 <label className={`block mb-2 ${textClass}`} htmlFor="location">Location</label>
-                <input 
-                  type="text" 
-                  id="location" 
+                <input
+                  type="text"
+                  id="location"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="e.g., New York"
@@ -334,7 +390,7 @@ function Producer() {
                 />
               </div>
 
-              <button 
+              <button
                 className={`px-6 py-3 rounded-full ${buttonHoverBg} border ${borderClass} text-center ${textClass} transition-all duration-300 hover:scale-105 w-1/4`}
                 onClick={() => {
                   setSearchSubmitted(true);
@@ -352,7 +408,7 @@ function Producer() {
           <div className="w-full max-w-4xl mb-8">
             <div className="flex justify-between items-center mb-6">
               <h3 className={`text-xl font-semibold ${textClass}`}>Producers</h3>
-              <button 
+              <button
                 className={`px-4 py-2 rounded-full ${buttonHoverBg} border ${borderClass} text-center ${textClass} transition-all duration-300 hover:scale-105`}
                 onClick={() => setSearchSubmitted(false)}
               >
@@ -361,14 +417,14 @@ function Producer() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {producers.map((producer) => (
-                <div 
-                  key={producer.id} 
+                <div
+                  key={producer.id}
                   onClick={() => setSelectedProducer(producer)}
                   className={`p-4 border ${borderClass} rounded-xl shadow ${bgClass} transition-all duration-300 hover:scale-105 cursor-pointer`}
                 >
-                  <img 
-                    src={producer.image} 
-                    alt={producer.name} 
+                  <img
+                    src={producer.image}
+                    alt={producer.name}
                     className="w-full h-32 object-cover rounded-xl mb-3"
                   />
                   <h4 className={`text-lg font-bold ${textClass}`}>{producer.name}</h4>
@@ -387,9 +443,9 @@ function Producer() {
         {selectedProducer && (
           <div className="modal-overlay" onClick={() => setSelectedProducer(null)}>
             <div className={`modal-content ${bgClass} ${textClass}`} onClick={(e) => e.stopPropagation()}>
-              <img 
-                src={selectedProducer.image} 
-                alt={selectedProducer.name} 
+              <img
+                src={selectedProducer.image}
+                alt={selectedProducer.name}
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />
               <h3 className="text-2xl font-bold mb-2">{selectedProducer.name}</h3>
@@ -403,7 +459,7 @@ function Producer() {
                   <ChevronRight className="w-4 h-4" /> Checkout
                 </button>
               </div>
-              <button 
+              <button
                 className="absolute top-2 right-2 text-2xl"
                 onClick={() => setSelectedProducer(null)}
               >

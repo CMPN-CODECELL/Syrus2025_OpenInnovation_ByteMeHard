@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, ChevronRight, ArrowUpRight, Bell, User } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
-
+import axios from "axios"
 function Retailer() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState('dark');
@@ -52,6 +52,49 @@ function Retailer() {
       address: '789 Broadway, Gotham, USA'
     },
   ];
+
+
+  const [retailer, setRetailer] = useState([]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND}/api/retailnego/get/retailer`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (!response.data || !Array.isArray(response.data)) {
+        throw new Error("Invalid data format received");
+      }
+
+      const mappedRetailers = response.data.map((retailer, index) => ({
+        id: retailer?._id || index + 1,
+        name: retailer?.retailerInfo?.name || "Unknown retailer",
+        details: retailer?.lastMessage?.content || "No details available.",
+        image:
+          retailer?.imageUrl ||
+          "https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150",
+        cost: `$${retailer?.budget ?? 0}`,
+        quantity: `${retailer?.quantity ?? 0} units`,
+        phone: retailer?.retailerInfo?.phone || "N/A",
+        status: retailer?.status || "Unknown",
+      }));
+
+      console.log("Mapped retailers:", mappedRetailers);
+      setRetailer(mappedRetailers);
+    } catch (error) {
+      console.error("Error fetching retailers:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // Dummy data for completed retailer requests
   const completedRequests = [
@@ -113,7 +156,7 @@ function Retailer() {
       `}</style>
 
       {/* Sidebar */}
-      <Sidebar 
+      <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         theme={theme}
@@ -124,7 +167,7 @@ function Retailer() {
       />
 
       {/* Mobile Menu Button */}
-      <button 
+      <button
         onClick={() => setIsSidebarOpen(true)}
         className={`md:hidden fixed top-4 right-4 z-40 p-2 ${bgClass} rounded-full shadow hover:shadow-xl transition-shadow duration-300 border ${borderClass} transform hover:scale-110`}
       >
@@ -133,7 +176,7 @@ function Retailer() {
 
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -160,8 +203,8 @@ function Retailer() {
         <div className="w-full max-w-4xl">
           <h3 className={`text-xl font-semibold ${textClass} mb-6`}>Active Retailer Requests</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {activeRetailers.map((retailer) => (
-              <div 
+            {retailer.map((retailer) => (
+              <div
                 key={retailer.id}
                 onClick={() => setSelectedRetailer(retailer)}
                 className={`p-4 border ${borderClass} rounded-xl shadow ${bgClass} transition-all duration-300 hover:scale-105 cursor-pointer`}
@@ -188,8 +231,8 @@ function Retailer() {
         <div className="w-full max-w-4xl">
           <h3 className={`text-xl font-semibold ${textClass} mb-6`}>Completed Requests</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {completedRequests.map((retailer) => (
-              <div 
+            {retailer.map((retailer) => (
+              <div
                 key={retailer.id}
                 className={`p-4 border ${borderClass} rounded-xl shadow ${bgClass} transition-all duration-300 hover:scale-105`}
               >
@@ -228,7 +271,7 @@ function Retailer() {
                   <ChevronRight className="w-4 h-4" /> Checkout
                 </button>
               </div>
-              <button 
+              <button
                 className="absolute top-2 right-2 text-2xl"
                 onClick={() => setSelectedRetailer(null)}
               >

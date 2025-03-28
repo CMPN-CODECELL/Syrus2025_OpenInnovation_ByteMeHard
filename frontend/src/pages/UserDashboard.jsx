@@ -15,7 +15,7 @@ const UserDashboard = () => {
 
     const fetchProducts = async () => {
         const response = await axios.get(
-            `${import.meta.env.VITE_BACKEND}/api/product/getall`,
+            `${import.meta.env.VITE_BACKEND}/get-producer-negogiation`,
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -29,6 +29,9 @@ const UserDashboard = () => {
     useEffect(() => {
         fetchProducts();
     }, []);
+
+
+ 
 
     return (
         <div className="mx-auto p-6 w-screen bg-white">

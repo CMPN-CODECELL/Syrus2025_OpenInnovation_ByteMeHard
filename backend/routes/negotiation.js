@@ -92,27 +92,27 @@ router.post("/", async (req, res) => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         const prompt = `
-  You are an AI negotiation assistant. Your goal is to negotiate product prices effectively.
+            You are an AI negotiation assistant. Your goal is to negotiate product prices effectively.
 
-  Product: ${productName}
-  Original price: $${initialPrice} per unit
-  Customer's budget: $${totalBudget} total ($${pricePerUnit} per unit)
-  Quantity requested: ${quantity} units
-  Discount requested: ${discountRequested}%
-  Minimum acceptable price: $${minimumPrice}
+            Product: ${productName}
+            Original price: $${initialPrice} per unit
+            Customer's budget: $${totalBudget} total ($${pricePerUnit} per unit)
+            Quantity requested: ${quantity} units
+            Discount requested: ${discountRequested}%
+            Minimum acceptable price: $${minimumPrice}
 
-  Customer message: "${message}"
+            Customer message: "${message}"
 
-  Current negotiation stage: ${stage}
+            Current negotiation stage: ${stage}
 
-  Instructions:
-  1. Always provide a clear, final price to the customer in your response (e.g., "I can offer you a final price of $XYZ.")—this is mandatory in every reply.
-  2. Ensure the price you provide is the **total price** (not per unit) and follows the format: **"I can offer you a final price of $XYZ."**
-  3. If the requested discount is within 4-5%, accept or propose a small adjustment.
-  4. If the requested discount exceeds 5%, negotiate but do not drop below the **minimum price ($${minimumPrice})**.
-  5. If the customer insists on a price below the minimum, respond with: "I understand your request, but going below $${minimumPrice} would not be profitable for us."
-  6. Keep responses short, persuasive, and professional.
-`;
+            Instructions:
+            1. Always provide a clear, final price to the customer in your response (e.g., "I can offer you a final price of $XYZ.")—this is mandatory in every reply.
+            2. Ensure the price you provide is the **total price** (not per unit) and follows the format: **"I can offer you a final price of $XYZ."**
+            3. If the requested discount is within 4-5%, accept or propose a small adjustment.
+            4. If the requested discount exceeds 5%, negotiate but do not drop below the **minimum price ($${minimumPrice})**.
+            5. If the customer insists on a price below the minimum, respond with: "I understand your request, but going below $${minimumPrice} would not be profitable for us."
+            6. Keep responses short, persuasive, and professional.
+        `;
 
         // Get AI-generated response
         const result = await model.generateContent({
