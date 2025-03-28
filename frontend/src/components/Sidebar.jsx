@@ -4,6 +4,7 @@ import {
   LayoutDashboard, 
   Users, 
   Store, 
+  List, 
   X as CloseIcon
 } from 'lucide-react';
 
@@ -32,21 +33,24 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen, theme, sidebarBg, borderClas
         </a>
         <a 
           href="/producer"
-          className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${
-            theme === 'dark' ? 'border-gray-600' : 'border-gray-400'
-          } mb-2 transition-all duration-300 transform hover:scale-105`}
+          className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${theme === 'dark' ? 'border-gray-600' : 'border-gray-400'} mb-2 transition-all duration-300 transform hover:scale-105`}
         >
           <Users className="w-5 h-5 mr-3" />
           Producers
         </a>
         <a 
           href="/retailer"
-          className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${
-            theme === 'dark' ? 'border-gray-600' : 'border-gray-400'
-          } transition-all duration-300 transform hover:scale-105`}
+          className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${theme === 'dark' ? 'border-gray-600' : 'border-gray-400'} transition-all duration-300 transform hover:scale-105`}
         >
           <Store className="w-5 h-5 mr-3" />
           Retailers
+        </a>
+        <a 
+          href="/list_products"
+          className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${theme === 'dark' ? 'border-gray-600' : 'border-gray-400'} transition-all duration-300 transform hover:scale-105`}
+        >
+          <List className="w-5 h-5 mr-3" />
+          List Your Products
         </a>
       </nav>
       {/* Close button for mobile */}
