@@ -8,17 +8,11 @@ function Retailer() {
   const [theme, setTheme] = useState('dark');
   const [selectedRetailer, setSelectedRetailer] = useState(null);
 
-  // Load saved theme on mount
+  // Load saved theme on mount (theme selected in Dashboard is continued)
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
   }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
 
   // Theme-based classes
   const bgClass = theme === 'dark' ? 'bg-black' : 'bg-white';
@@ -147,20 +141,12 @@ function Retailer() {
 
       {/* Main Content - Centered */}
       <main className="flex-1 overflow-y-auto p-8 flex flex-col items-center space-y-12">
-        {/* Top Bar */}
+        {/* Top Bar without Theme Toggle */}
         <div className={`w-full max-w-4xl flex flex-col md:flex-row md:items-center md:justify-between border-b ${borderClass} pb-4`}>
           <h2 className={`text-2xl font-bold ${textClass} transition-transform duration-300 transform hover:scale-105`}>
             Retailer Requests
           </h2>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
-            <label className="switch">
-              <input 
-                type="checkbox" 
-                checked={theme === 'light'} 
-                onChange={toggleTheme} 
-              />
-              <span className="slider"></span>
-            </label>
             <button className={`p-2 rounded-full ${buttonHoverBg} border ${borderClass} transition-transform duration-300 transform hover:scale-110`}>
               <Bell className="w-6 h-6" style={{ color: theme === 'dark' ? '#FFFFFF' : '#000000' }} />
             </button>
