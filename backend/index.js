@@ -8,13 +8,13 @@ const LoginRouter = require("./routes/login");
 const ResgisterRouter = require('./routes/register')
 // const SignupRouter = require("./routes/signup");
 // const LogoutRouter = require("./routes/logout");
-// const NewProductRouter = require("./routes/new_product");
+const NewProductRouter = require("./routes/new_product");
 // const router = require("./routes/supplier");
 // const RawMaterialRouter = require("./routes/raw_material");
 // const transactionRouter = require("./routes/addTransaction");
 // const retailerRouter = require("./routes/retailer");
 // // const userRouter = require("./routes/user_details")
-// const negotiationRouter = require("./routes/negotiation");
+const negotiationRouter = require("./routes/negotiation");
 // const productRouter = require("./routes/new_product");
 // const AddPostRouter = require("./routes/AddPost.routes");
 // const GetPostRouter = require("./routes/GetPost.route");
@@ -47,13 +47,13 @@ app.use("/api/login", LoginRouter);
 app.use("/api/register", ResgisterRouter);
 // app.use("/api/signup", SignupRouter);
 // app.use("/api/logout", LogoutRouter);
-// app.use("/api/product", NewProductRouter);
+app.use("/api/product", NewProductRouter);
 // app.use("/api/supplier", router);
 // app.use("/api/raw_material", RawMaterialRouter);
 // app.use("/api/transaction", transactionRouter);
 // app.use("/api/retailer", retailerRouter);
 // app.use("/api/user",userRouter)
-// app.use("/api/negotiate", negotiationRouter);
+app.use("/api/negotiate", negotiationRouter);
 // app.use("/api/posts", AddPostRouter);
 // app.use("/api/posts", GetPostRouter);
 
