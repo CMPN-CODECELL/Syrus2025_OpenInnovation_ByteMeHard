@@ -54,7 +54,8 @@ function Producer() {
   const producers = [
     { 
       id: 1, 
-      name: 'Producer One', 
+      material: 'Wood', 
+      name : 'Producer 1',
       details: 'Experienced in electronics manufacturing. Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 
       image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
       cost: '$200',
@@ -62,6 +63,7 @@ function Producer() {
     },
     { 
       id: 2, 
+      material: 'Wood', 
       name: 'Producer Two', 
       details: 'Specializes in home appliances. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
@@ -70,6 +72,7 @@ function Producer() {
     },
     { 
       id: 3, 
+      material: 'Wood', 
       name: 'Producer Three', 
       details: 'Expert in custom metal fabrication. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.',
       image: 'https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150',
@@ -371,7 +374,7 @@ function Producer() {
                     alt={producer.name} 
                     className="w-full h-32 object-cover rounded-xl mb-3"
                   />
-                  <h4 className={`text-lg font-bold ${textClass}`}>{producer.name}</h4>
+                  <h4 className={`text-lg font-bold ${textClass}`}>{producer.material}</h4>
                   <p className={`${textClass} mt-2`}>{producer.details.substring(0, 50)}...</p>
                   <div className="mt-3 flex justify-between">
                     <span className={`text-sm font-medium ${textClass}`}>Cost: {producer.cost}</span>
@@ -392,7 +395,9 @@ function Producer() {
                 alt={selectedProducer.name} 
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />
-              <h3 className="text-2xl font-bold mb-2">{selectedProducer.name}</h3>
+                            <h3 className="text-2xl font-bold mb-2">{selectedProducer.material}</h3>
+
+              <h5 className="text-2xl font-bold mb-2">{selectedProducer.name}</h5>
               <p className="mb-4">{selectedProducer.details}</p>
               <div className="flex justify-between mb-4">
                 <span className="font-medium">Cost: {selectedProducer.cost}</span>

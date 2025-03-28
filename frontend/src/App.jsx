@@ -16,6 +16,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+
         <Route path="/producer" element={<Producer />} />
         <Route path="/retailer" element={<Retailer />} />
         <Route path="/list_products" element={<List_products />} />
