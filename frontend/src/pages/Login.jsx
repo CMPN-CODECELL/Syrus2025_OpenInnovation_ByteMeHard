@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
 import { Facebook, Twitter, Github, Linkedin } from 'lucide-react';
+import { postRequest } from '../utils/api';
+import toast, { useToaster } from 'react-hot-toast';
+
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [selectedType, setSelectedType] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    phone_number: '',
+    address: '',
+    type: '',
+    typeOfManufacturer: ''
+  });
+  const toast = useToaster();
 
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
@@ -17,6 +30,34 @@ const Login = () => {
     'Food & Beverages',
     'Pharmaceuticals'
   ];
+
+  const handleLogin=async(e)=>{
+    e.preventDefault();
+    // Handle login logic here
+    console.log('Login data:', formData);
+    const response = await postRequest('/api/login',formData);
+    console.log("Response from login",response);
+    if(response.status==200){
+      alert("Login successful");
+      console.log("Login successful",response.data);
+    }
+  }
+
+  const handleRegister=async(e)=>{
+    e.preventDefault();
+    // Handle registration logic here
+    console.log('Registration data:', formData);
+    const response = await postRequest('/api/register',formData);
+    console.log("Response from register",response);
+    if(response.status==201){
+      alert("Registration successful");
+      console.log("Registration successful",response.data);
+    }
+    else if(response.status==400){
+      alert("User already exists");
+      console.log("User already exists",response.data);
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -69,17 +110,23 @@ const Login = () => {
           <input
             type="email"
             placeholder="Email"
+            name='email'
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            value={formData.email}
             className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black text-sm"
           />
           <input
             type="password"
             placeholder="Password"
+            name='password'
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            value={formData.password}
             className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black text-sm"
           />
           <a href="#" className="text-xs text-gray-600 hover:text-black mb-6 text-center">
             Forget Your Password?
           </a>
-          <button className="bg-black text-white px-6 py-2.5 rounded-full hover:bg-gray-800 transition-colors text-sm">
+          <button onClick={(e)=>handleLogin(e)} className="bg-black text-white px-6 py-2.5 rounded-full hover:bg-gray-800 transition-colors text-sm">
             SIGN IN
           </button>
         </div>
@@ -97,7 +144,7 @@ const Login = () => {
           <select
             className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black bg-white text-sm"
             value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
+            onChange={(e) => {setSelectedType(e.target.value) ; setFormData({ ...formData, type: e.target.value })}}
           >
             <option value="" disabled>Select Type</option>
             <option value="manufacturer">Manufacturer</option>
@@ -108,6 +155,7 @@ const Login = () => {
             <select
               className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black bg-white text-sm"
               defaultValue=""
+              onChange={(e) => setFormData({ ...formData, typeOfManufacturer: e.target.value })}
             >
               <option value="" disabled>Select Manufacturer Type</option>
               {manufacturerTypes.map((type) => (
@@ -118,29 +166,44 @@ const Login = () => {
           <input
             type="text"
             placeholder="Name"
+            name='name'
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            value={formData.name}
             className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black text-sm"
           />
           <input
             type="email"
             placeholder="Email"
+            name='email'
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            value={formData.email}
             className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black text-sm"
           />
           <input
             type="password"
             placeholder="Password"
+            name='password'
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            value={formData.password}
             className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black text-sm"
           />
           <input
             type="tel"
             placeholder="Phone Number"
+            name='phone_number'
+            onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+            value={formData.phone_number}
             className="mb-4 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black text-sm"
           />
           <textarea
             placeholder="Address"
+            name='address'
+            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+            value={formData.address}
             rows={3}
             className="mb-6 p-2.5 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-black resize-none text-sm"
           />
-          <button className="bg-black text-white px-6 py-2.5 rounded-full hover:bg-gray-800 transition-colors text-sm">
+          <button onClick={(e)=>handleRegister(e)} className="bg-black text-white px-6 py-2.5 rounded-full hover:bg-gray-800 transition-colors text-sm">
             SIGN UP
           </button>
         </div>
