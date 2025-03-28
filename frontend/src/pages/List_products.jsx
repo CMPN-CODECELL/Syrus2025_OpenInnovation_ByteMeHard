@@ -168,7 +168,7 @@ function ListProducts() {
             </div>
             <button
               type="submit"
-              className="w-1/3 py-3 rounded-full bg-black text-white transition-all duration-300 hover:scale-105"
+              className="w-1/4 py-3 rounded-full bg-white   text-black transition-all duration-300 hover:scale-105"
             >
               Submit
             </button>
