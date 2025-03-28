@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { X, Send, ShoppingCart, AlertCircle } from "lucide-react";
 import axios from 'axios';
-import { X, AlertCircle, ShoppingCart, Send } from 'lucide-react'; // Assuming you're still using Lucide icons
 
 const ChatBot = ({ onClose, productId, minimumPrice, initialPrice, productName, retailerId }) => {
     const [messages, setMessages] = useState([
@@ -358,10 +358,10 @@ const ChatBot = ({ onClose, productId, minimumPrice, initialPrice, productName, 
                             >
                                 <div
                                     className={`max-w-[80%] rounded-lg p-3 ${message.type === 'user'
-                                        ? 'bg-blue-500 text-white'
-                                        : message.isNotification
-                                            ? 'bg-amber-50 border border-amber-200 text-amber-800'
-                                            : 'bg-gray-100 text-gray-800'
+                                            ? 'bg-blue-500 text-white'
+                                            : message.isNotification
+                                                ? 'bg-amber-50 border border-amber-200 text-amber-800'
+                                                : 'bg-gray-100 text-gray-800'
                                         }`}
                                 >
                                     {message.isNotification && (
@@ -424,7 +424,6 @@ const ChatBot = ({ onClose, productId, minimumPrice, initialPrice, productName, 
                 </div>
             </div>
         </div>
-
     );
 };
 

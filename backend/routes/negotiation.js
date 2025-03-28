@@ -65,18 +65,18 @@ router.post("/", async (req, res) => {
         }
 
         // Detect "deal done" or similar confirmation from customer
-        const isDealDone =
-            /deal(?:\s+done| confirmed| ok| okay| agreed| final)/i.test(message);
+        // const isDealDone =
+        //     /deal(?:\s+done| confirmed| ok| okay| agreed| final)/i.test(message);
 
-        if (isDealDone) {
-            negotiation.status = "completed";
-            await negotiation.save();
-            return res.json({
-                message: "The deal is finalized. Thank you for your purchase!",
-                negotiationId: negotiation._id,
-                aiSuggestedPrice: aiSuggestedPrice || budget,
-            });
-        }
+        // if (isDealDone) {
+        //     negotiation.status = "completed";
+        //     await negotiation.save();
+        //     return res.json({
+        //         message: "The deal is finalized. Thank you for your purchase!",
+        //         negotiationId: negotiation._id,
+        //         aiSuggestedPrice: aiSuggestedPrice || budget,
+        //     });
+        // }
 
         // Calculate price details
         // Calculate price details
