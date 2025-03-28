@@ -34,7 +34,7 @@ const Footer = () => {
         {/* Center - Rotating Circular Text */}
         <div className="flex justify-center">
           <CircularText
-            text="REACT*BITS*COMPONENTS*"
+            text="NIRMAN*GATI*NIRMAN*"
             onHover="speedUp"
             spinDuration={20}
             className="w-24 h-24"
