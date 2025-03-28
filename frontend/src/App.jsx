@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/producer" element={<Producer />} />
         <Route path="/retailer" element={<Retailer />} />
-        <Route path="/negogiate" element={<UserDashboard />} />
+
       </Routes>
     </Router>
   );
