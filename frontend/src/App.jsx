@@ -3,7 +3,7 @@ import Dashboard from "./pages/Dashboard"; // Create this component
 import Producer from "./pages/Producer";
 import Retailer from "./pages/Retailer";
 import Login from "./pages/Login";
-import Payment from "./Payment";
+import Payment from "./pages/Payment";
 import UserDashboard from "./pages/UserDashboard";
 
 export default function App() {
