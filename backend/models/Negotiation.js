@@ -78,6 +78,6 @@ negotiationSchema.pre('save', function(next) {
   next();
 });
 
-const Negotiation = mongoose.model('Negotiation_testingg', negotiationSchema);
+const Negotiation = mongoose.model('Negotiation', negotiationSchema);
 
 module.exports = { Negotiation }; 
