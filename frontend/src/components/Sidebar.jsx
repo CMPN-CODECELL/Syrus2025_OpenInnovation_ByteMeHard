@@ -1,5 +1,6 @@
 // Sidebar.jsx
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Users, 
@@ -24,34 +25,34 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen, theme, sidebarBg, borderClas
         </h1>
       </div>
       <nav className="mt-8 px-4">
-        <a 
-          href="#"
+        <NavLink 
+          to="/dashboard"
           className={`flex items-center px-4 py-3 ${sidebarText} ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'} rounded-lg border-l ${theme === 'dark' ? 'border-white' : 'border-black'} mb-2 transition-all duration-300 transform hover:scale-105 ${buttonHoverBg} shadow-sm`}
         >
           <LayoutDashboard className="w-5 h-5 mr-3" />
           Dashboard
-        </a>
-        <a 
-          href="/producer"
+        </NavLink>
+        <NavLink 
+          to="/producer"
           className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${theme === 'dark' ? 'border-gray-600' : 'border-gray-400'} mb-2 transition-all duration-300 transform hover:scale-105`}
         >
           <Users className="w-5 h-5 mr-3" />
           Producers
-        </a>
-        <a 
-          href="/retailer"
+        </NavLink>
+        <NavLink 
+          to="/retailer"
           className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${theme === 'dark' ? 'border-gray-600' : 'border-gray-400'} transition-all duration-300 transform hover:scale-105`}
         >
           <Store className="w-5 h-5 mr-3" />
           Retailers
-        </a>
-        <a 
-          href="/list_products"
+        </NavLink>
+        <NavLink 
+          to="/list_products"
           className={`flex items-center px-4 py-3 ${sidebarText} ${buttonHoverBg} rounded-lg hover:border-l ${theme === 'dark' ? 'border-gray-600' : 'border-gray-400'} transition-all duration-300 transform hover:scale-105`}
         >
           <List className="w-5 h-5 mr-3" />
           List Your Products
-        </a>
+        </NavLink>
       </nav>
       {/* Close button for mobile */}
       <button 
