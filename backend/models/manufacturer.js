@@ -52,15 +52,15 @@ const ManufacturerSchema = new mongoose.Schema(
     bank_details:{
       account_number:{
         type: Number,
-        required: true
+
       },
       ifsc_code:{
         type: String,
-        required: true
+
       },
       bank_name:{
         type: String,
-        required: true
+
       },
     }
   },
