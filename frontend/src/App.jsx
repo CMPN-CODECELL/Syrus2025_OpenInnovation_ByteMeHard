@@ -9,6 +9,9 @@ import DashboardRetailer from "./pages/Retailer_side/DashboardRetailer";
 import Negotiate from "./pages/Retailer_side/Negotiate";
 import Tax from "./pages/taxes/Tax";
 import Subsidy from "./pages/subsidies/Subsidy";
+import Payment from "./pages/Payment";
+import DashboardProducer from "./pages/Producer_side/DashboardProducer";
+import ManufacturerRequests from "./pages/Producer_side/ManufacturerRequests";
 
 
 export default function App() {
