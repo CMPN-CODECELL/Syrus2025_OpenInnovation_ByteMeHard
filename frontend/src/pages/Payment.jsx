@@ -7,7 +7,9 @@ const Payment = () => {
     const [searchParams] = useSearchParams();
     const quantity = searchParams.get('quantity');
     const budget = searchParams.get('budget');
-    console.log('Quantity:', quantity, 'Budget:', budget);
+    const id = searchParams.get('id');
+    console.log('Quantity:', quantity, 'Budget:', budget, 'id', id);
+
 
     useEffect(() => {
         const loadRazorpayScript = () => {
@@ -35,14 +37,13 @@ const Payment = () => {
         }
 
         try {
-            // Fetch order from the backend
             const { data } = await axios.post("http://localhost:8000/order", { amount: budget });
             const { order_id, amount, currency, key } = data;
 
             console.log("Order Created:", data);
 
             const options = {
-                key, // Public key from backend
+                key,
                 amount,
                 currency,
                 order_id,
@@ -53,7 +54,11 @@ const Payment = () => {
                     console.log("Payment Success Response:", response);
 
                     try {
-                        await axios.post("http://localhost:8000/payment/verify", response);
+                        await axios.post("http://localhost:8000/payment/verify", {
+                            ...response,
+                            id,
+                            budget,
+                        });
                         alert("Payment verification successful.");
                     } catch (verifyError) {
                         console.error("Verification Error:", verifyError);
