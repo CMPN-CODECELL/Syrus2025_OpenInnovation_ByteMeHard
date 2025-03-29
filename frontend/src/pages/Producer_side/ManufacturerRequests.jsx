@@ -36,6 +36,14 @@ function ManufacturerRequests() {
       location: "Metropolis, USA",
       details: "Request for ergonomic chairs with adjustable features.",
     },
+    {
+      id: 3,
+      orderFor: "Lamp Order",
+      priceOffered: "$80 per unit",
+      quantity: "150 units",
+      location: "Smallville, USA",
+      details: "Completed order for modern desk lamps.",
+    },
   ];
 
   const completedRequests = [
@@ -61,7 +69,7 @@ function ManufacturerRequests() {
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   return (
-    <div className={`${bgClass} min-h-screen`}>
+    <div className={`${bgClass} min-h-screen flex`}>
       {/* Modal CSS */}
       <style>{`
         .modal-overlay {
@@ -99,7 +107,7 @@ function ManufacturerRequests() {
       `}</style>
 
       {/* Sidebar */}
-      <div className="fixed md:static w-[280px] bg-white border-gray-300 h-full z-50 p-6">
+      <div className="fixed md:static w-[280px] bg-white border-gray-300 h-full z-50 p-2">
         <h1 className="text-2xl font-bold flex items-center space-x-3 text-black">
           <div className="bg-white text-black p-3 rounded-lg shadow">
             <span className="text-xl font-black tracking-wider">NG</span>
@@ -135,11 +143,11 @@ function ManufacturerRequests() {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto p-4 space-y-8">
+      <main className="max-w-7xl mx-auto pt-20 pr-30 pb-4 px-4 space-y-10">
         {/* Active Requests Section */}
         <section>
           <h2 className="text-xl font-semibold mb-4 text-black">Active Manufacturer Requests</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {activeRequests.map((request) => (
               <div 
                 key={request.id} 

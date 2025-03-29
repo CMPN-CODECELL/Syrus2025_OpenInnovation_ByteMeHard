@@ -327,28 +327,28 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto h-full flex flex-col rounded-lg overflow-hidden bg-gray-900 text-gray-100 shadow-xl border border-gray-700">
+    <div className="w-full max-w-5xl mx-auto h-full flex flex-col mt-10 mb-10 rounded-lg overflow-hidden bg-gray-900 text-black shadow-xl border border-gray-700">
       {/* Header with gradient */}
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 py-4 px-5 border-b border-gray-700">
+      <div className="bg-white py-4 px-5 border-b border-black">
         <div className="flex justify-between items-center">
           <div className="text-lg font-medium flex items-center">
-            <div className="w-6 h-6 mr-2 rounded-full bg-indigo-500 flex items-center justify-center">
+            <div className="w-6 h-6 mr-2 rounded-full bg-white flex items-center justify-center">
               <Sparkles className="w-3 h-3 text-white" />
             </div>
-            <span className="text-gray-100">Negotiating: {productName}</span>
+            <span className="text-black">Negotiating: {productName}</span>
           </div>
           <button
             onClick={onClose}
             className="p-1.5 hover:bg-gray-700 rounded-full transition-colors"
             aria-label="Close"
           >
-            <X className="h-5 w-5 text-gray-400" />
+            <X className="h-5 w-5 text-black" />
           </button>
         </div>
       </div>
 
       {/* Content area */}
-      <div className="flex-grow p-5 overflow-hidden bg-gray-900 flex flex-col">
+      <div className="flex-grow p-5 overflow-hidden bg-white flex flex-col">
         {/* Scrollable Content */}
         <div
           ref={scrollAreaRef}
@@ -362,10 +362,10 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
               >
                 <div
                   className={`max-w-[85%] rounded-lg p-4 ${message.type === 'user'
-                    ? 'bg-indigo-600 text-white rounded-tr-none'
+                    ? 'bg-gray-100 text-black rounded-tr-none'
                     : message.isNotification
-                      ? 'bg-amber-900 border border-amber-700 text-amber-100'
-                      : 'bg-gray-800 text-gray-100 rounded-tl-none'
+                      ? 'bg-white border border-black text-black'
+                      : 'bg-black text-white rounded-tl-none'
                     }`}
                 >
                   {message.isNotification && (
@@ -392,12 +392,12 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
 
             {negotiationState.isProcessing && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-lg p-4 bg-gray-800 text-gray-300">
+                <div className="max-w-[85%] rounded-lg p-4 bg-white text-black">
                   <div className="flex space-x-2 items-center">
                     {[0, 150, 300].map((delay) => (
                       <div
                         key={delay}
-                        className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce"
+                        className="w-2 h-2 rounded-full bg-white animate-bounce"
                         style={{ animationDelay: `${delay}ms` }}
                       ></div>
                     ))}
@@ -410,7 +410,7 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
       </div>
 
       {/* Footer with input */}
-      <div className="border-t border-gray-700 p-4 bg-gray-800">
+      <div className="border-t border-black p-4 bg-white">
         <div className="flex w-full gap-2 items-center">
           <div className="relative flex-grow">
             <input
@@ -419,7 +419,7 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your offer..."
-              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 placeholder-gray-400"
+              className="w-full px-4 py-3 bg-black border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-white text-gray-100 placeholder-gray-400"
               disabled={negotiationState.isProcessing || negotiationState.dealAgreed}
             />
             {negotiationState.dealAgreed && (
@@ -431,7 +431,7 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
           <button
             onClick={handleSendMessage}
             disabled={!inputMessage.trim() || negotiationState.isProcessing || negotiationState.dealAgreed}
-            className="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="bg-black text-white p-3 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Send className="h-5 w-5" />
           </button>
