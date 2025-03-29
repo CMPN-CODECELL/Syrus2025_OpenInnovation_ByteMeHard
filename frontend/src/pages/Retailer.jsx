@@ -2,7 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, ChevronRight, ArrowUpRight, Bell, User } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
-import axios from "axios"
+import axios from "axios";
+import Payment from './Payment';
+
 function Retailer() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState('dark');
@@ -267,8 +269,11 @@ function Retailer() {
                 <p><strong>Address:</strong> {selectedRetailer.address}</p>
               </div>
               <div className="flex justify-end">
-                <button className="px-6 py-2 rounded-full bg-blue-600 text-white transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                  <ChevronRight className="w-4 h-4" /> Checkout
+              <button
+                  onClick={() => navigate('/payment')}
+                  className="px-6 py-2 rounded-full bg-green-600 text-white transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                >
+                  Checkout
                 </button>
               </div>
               <button

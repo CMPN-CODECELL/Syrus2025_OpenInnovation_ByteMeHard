@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, ChevronRight, ArrowUpRight, Bell, User } from 'lucide-react';
 import { Line, Bar } from 'react-chartjs-2';
+import Payment from '../Payment';
 import {
   Chart,
   CategoryScale,
@@ -328,7 +329,7 @@ function DashboardRetailer() {
                   <ChevronRight className="w-4 h-4" /> Negotiate Price
                 </button>
                 <button
-                  onClick={() => navigate('/checkout')}
+                  onClick={() => navigate('/payment')}
                   className="px-6 py-2 rounded-full bg-green-600 text-white transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 >
                   Checkout

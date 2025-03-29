@@ -30,6 +30,12 @@ const port = process.env.PORT || 8000;
 const csv = require("csv-parser");
 const fs = require("fs");
 const ExcelJS = require("exceljs");
+const BalanceRouter = require("./routes/balance_sheet_details");
+const { Negotiation } = require("./models/Negotiation");
+const TransactionManufacturerRetailer = require("./models/transaction_between_manufacturer_retailer");
+const Product = require("./models/product");
+const Retailer = require("./models/retailer");
+const Manufacturer = require("./models/manufacturer");
 
 // Database Connection
 connectDB();
@@ -66,6 +72,7 @@ app.use("/api", negotiationRequestRouter);
 // app.use("/api/posts", AddPostRouter);
 // app.use("/api/posts", GetPostRouter);
 app.use("/api", getProducerRouter);
+app.use("/balance", BalanceRouter);
 // MongoDB connection
 // mongoose.connect(process.env.MONGODB_URI)
 // .then(() => console.log('Connected to MongoDB'))
@@ -109,33 +116,94 @@ app.post('/order', async (req, res) => {
 });
 
 // Verify Payment
+// app.post('/payment/verify', async (req, res) => {
+//     try {
+//         const { id, budget, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+//         console.log("id", id);
+//         console.log("budget", budget);
+//         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+//             return res.status(400).json({ error: 'Missing payment details' });
+//         }
+
+//         const sha = crypto.createHmac('sha256', process.env.KEY_SECRET);
+//         sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+//         const generatedSignature = sha.digest('hex');
+
+//         if (generatedSignature !== razorpay_signature) {
+//             return res.status(400).json({ error: 'Invalid payment signature' });
+//         }
+
+//         const negotiation = await Negotiation.findById(id);
+//         const product = await product.findById(negotiation.productId);
+//         const retailer = await retailer.findById(negotiation.retailerId);
+//         const customer = await manufacturer.findById(negotiation.customerId);// Ensure correct model reference
+    
+//         console.log("negogiation",negotiation);
+//         console.log("product",product);
+//         console.log("retailer",retailer);
+//         console.log("customer",customer);
+        
+//       if (!negotiation) {
+//         return res.status(404).json({ error: 'Negotiation not found' });
+//       }
+  
+//       if (negotiation.status !== 'accepted') {
+//         return res.status(400).json({ error: 'Negotiation is not accepted' });
+//       }
+  
+//       const newTransaction = new TransactionManufacturerRetailer({
+//         buyer: retailer._id, // Retailer as buyer
+//         seller: customer._id, // Manufacturer as seller
+//         product_details: product._id, // Product reference
+//         quantity: negotiation.quantity,
+//         amount: budget,
+//       });
+  
+//       await newTransaction.save();
+//       negotiation.status = 'completed';
+//       await negotiation.save();
+//         res.json({
+//             success: true,
+//             message: 'Payment verified successfully',
+//             orderId: razorpay_order_id,
+//             paymentId: razorpay_payment_id,
+//         });
+//     } catch (error) {
+//         console.error('Payment verification error:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
+
+
+// Verify Payment
 app.post('/payment/verify', async (req, res) => {
-    try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  try {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-            return res.status(400).json({ error: 'Missing payment details' });
-        }
+      if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+          return res.status(400).json({ error: 'Missing payment details' });
+      }
 
-        const sha = crypto.createHmac('sha256', process.env.KEY_SECRET);
-        sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
-        const generatedSignature = sha.digest('hex');
+      const sha = crypto.createHmac('sha256', process.env.KEY_SECRET);
+      sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+      const generatedSignature = sha.digest('hex');
 
-        if (generatedSignature !== razorpay_signature) {
-            return res.status(400).json({ error: 'Invalid payment signature' });
-        }
+      if (generatedSignature !== razorpay_signature) {
+          return res.status(400).json({ error: 'Invalid payment signature' });
+      }
 
-        res.json({
-            success: true,
-            message: 'Payment verified successfully',
-            orderId: razorpay_order_id,
-            paymentId: razorpay_payment_id,
-        });
-    } catch (error) {
-        console.error('Payment verification error:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+      res.json({
+          success: true,
+          message: 'Payment verified successfully',
+          orderId: razorpay_order_id,
+          paymentId: razorpay_payment_id,
+      });
+  } catch (error) {
+      console.error('Payment verification error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
 });
+
 
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;

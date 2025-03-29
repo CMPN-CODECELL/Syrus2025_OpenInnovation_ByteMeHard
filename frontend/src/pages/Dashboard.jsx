@@ -1,6 +1,6 @@
 // Dashboard.jsx
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   Menu,
   ChevronRight,
   ArrowUpRight,
@@ -10,12 +10,28 @@ import {
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import Sidebar from '../components/Sidebar';
-
+import axios from "axios";
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
 function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState('dark');
+
+  const [fullAmount, setFullAmount] = useState(0);
+
+  useEffect(() => {
+    const getFullAmount = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND}/balance/total-profit`);
+        const data = response.data.totalProfit; // Accessing totalProfit from response.data
+        setFullAmount(data);
+      } catch (error) {
+        console.error("Error fetching total profit:", error);
+      }
+    };
+    getFullAmount();
+  }, []);
+
 
   // On mount, load saved theme
   useEffect(() => {
@@ -95,7 +111,7 @@ function Dashboard() {
   };
 
   // Profit top section dummy values
-  const profitValue = "$1,234,567";
+  const profitValue = fullAmount;
   const profitPercentage = "12.5%";
 
   return (
@@ -151,7 +167,7 @@ function Dashboard() {
       `}</style>
 
       {/* Sidebar Component */}
-      <Sidebar 
+      <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         theme={theme}
@@ -162,7 +178,7 @@ function Dashboard() {
       />
 
       {/* Mobile menu button */}
-      <button 
+      <button
         onClick={() => setIsSidebarOpen(true)}
         className={`md:hidden fixed top-4 right-4 z-40 p-2 ${bgClass} rounded-lg shadow hover:shadow-xl transition-shadow duration-300 border ${borderClass} transform hover:scale-110`}
       >
@@ -171,7 +187,7 @@ function Dashboard() {
 
       {/* Overlay for mobile sidebar */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -187,10 +203,10 @@ function Dashboard() {
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Custom toggle switch placed on the right */}
             <label className="switch">
-              <input 
-                type="checkbox" 
-                checked={theme === 'light'} 
-                onChange={toggleTheme} 
+              <input
+                type="checkbox"
+                checked={theme === 'light'}
+                onChange={toggleTheme}
               />
               <span className="slider round"></span>
             </label>
@@ -271,8 +287,8 @@ function Dashboard() {
                 { name: 'Lamp', items: 80 },
                 { name: 'Sofa', items: 70 },
               ].map((buyer, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`flex justify-between items-center p-2 ${buttonHoverBg} rounded transition-all duration-300 transform hover:scale-105 border ${borderClass}`}
                 >
                   <span className={textClass}>{buyer.name}</span>
@@ -325,11 +341,10 @@ function Dashboard() {
                     <tr key={index} className={`border-b ${borderClass} hover:bg-${theme === 'dark' ? 'gray-900' : 'gray-100'} transition-all duration-300`}>
                       <td className="py-3 pl-4">{product.name}</td>
                       <td className="py-3">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${
-                          product.status === 'Available' ? 'bg-green-100 text-green-800 border-green-200' :
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${product.status === 'Available' ? 'bg-green-100 text-green-800 border-green-200' :
                           product.status === 'Sold' ? 'bg-blue-100 text-blue-800 border-blue-200' :
-                          'bg-yellow-100 text-yellow-800 border-yellow-200'
-                        }`}>
+                            'bg-yellow-100 text-yellow-800 border-yellow-200'
+                          }`}>
                           {product.status}
                         </span>
                       </td>

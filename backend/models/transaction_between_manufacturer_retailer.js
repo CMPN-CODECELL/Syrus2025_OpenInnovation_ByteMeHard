@@ -17,11 +17,15 @@ const transactionSchema = new Schema({
         type:Number,
         required:true
     }, 
+    amount :{
+        type:Number,
+        required:true
+    },
 
 }, {
     timestamps: true
 });
 
-const Transaction = mongoose.model('Transaction_between_manufacturer_retailer', transactionSchema);
+const TransactionManufacturerRetailer = mongoose.model('Transaction_between_manufacturer_retailer', transactionSchema);
 
-module.exports = Transaction;
+module.exports = TransactionManufacturerRetailer;

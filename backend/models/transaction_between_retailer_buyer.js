@@ -22,6 +22,6 @@ const transactionSchema = new Schema({
     timestamps: true
 });
 
-const Transaction = mongoose.model('Transaction_between_retailer_buyer', transactionSchema);
+const TransactionRetailerBuyer = mongoose.model('Transaction_between_retailer_buyer', transactionSchema);
 
-module.exports = Transaction;
+module.exports = TransactionRetailerBuyer;

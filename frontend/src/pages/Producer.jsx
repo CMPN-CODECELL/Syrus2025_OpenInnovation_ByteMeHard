@@ -1,5 +1,7 @@
 // Producer.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import Payment from './Payment';
 import {
   Menu,
   ChevronRight,
@@ -455,8 +457,11 @@ function Producer() {
                 <span className="font-medium">Quantity: {selectedProducer.quantity}</span>
               </div>
               <div className="flex justify-end">
-                <button className="px-6 py-2 rounded-full bg-blue-600 text-white transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                  <ChevronRight className="w-4 h-4" /> Checkout
+              <button
+                  onClick={() => navigate('/payment')}
+                  className="px-6 py-2 rounded-full bg-green-600 text-white transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                >
+                  Checkout
                 </button>
               </div>
               <button

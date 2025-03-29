@@ -12,6 +12,7 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [negotiateId, setNegotiateId] = useState(null);
   const [negotiationState, setNegotiationState] = useState({
     budget: null,
     quantity: null,
@@ -63,7 +64,8 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND}/api/retailnego/retailer/negotiations/${negotiationState.negotiationId}`);
       const negotiation = response.data;
-      console.log("negigoation", negotiation)
+      console.log("negigoation", negotiation) 
+      setNegotiateId(negotiation._id);
       // If retailer has responded and we haven't processed it yet
       if (negotiation.status !== 'active' && !negotiationState.retailerResponse) {
         if (negotiation.status === 'completed') {
@@ -320,9 +322,9 @@ const Negotiate = ({ onClose, productId, minimumPrice, initialPrice, productName
   };
 
   const handlePurchase = () => {
-
+    
     alert(`We Are redirect to the payment form , Purchase confirmed! ${negotiationState.quantity} units of ${productName} for $${finalprice}`);
-    navigate(`/payment?quantity=${negotiationState.quantity}&budget=${finalprice}`);
+    navigate(`/payment?quantity=${negotiationState.quantity}&budget=${finalprice}&id=${negotiateId}`);
     onClose();
   };
 
