@@ -3,6 +3,13 @@ import LandingPage from "./pages/landingPage/LandingPage"; // Adjust path if nee
 import Dashboard from "./pages/Dashboard"; // Create this component
 import Producer from "./pages/Producer"; 
 import Retailer from "./pages/Retailer";
+import Login from "./pages/Login";
+import List_products from "./pages/List_products";
+import DashboardRetailer from "./pages/Retailer_side/DashboardRetailer";
+import Negotiate from "./pages/Retailer_side/Negotiate";
+import DashboardProducer from "./pages/Producer_side/DashboardProducer";
+import ManufacturerRequests from "./pages/Producer_side/ManufacturerRequests";
+
 
 
 export default function App() {
@@ -19,6 +26,10 @@ export default function App() {
         <Route path="/list_products" element={<List_products />} />
         <Route path="/dashboard_retailer" element={<DashboardRetailer />} />
         <Route path="/negotiate" element={<Negotiate />} />
+        <Route path="/dashboard_producer" element={<DashboardProducer />} />
+        <Route path="/manufacturer_requests" element={<ManufacturerRequests />} />
+
+
 
 
       </Routes>
