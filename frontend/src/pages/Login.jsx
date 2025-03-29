@@ -69,9 +69,15 @@ const Login = () => {
       const response = await postRequest('/api/register', formData);
       if (response) {
         alert("Registration successful");
-        if (response.data.message === "manufacture") navigate("/dashboard");
-        else if (response.data.message === "retailer") navigate("/dashboard_retailer");
-        else navigate("/manufacture");
+        const message = response.message;
+        console.log("Role message:", message);
+        if (message == "manufacture") navigate("/dashboard");
+        else if (message == "retailer") navigate("/dashboard_retailer");
+        else if (message == "supplier") navigate("/dashboard_producer");
+        else navigate("/dashboard");
+        // if (response.data.message === "manufacture") navigate("/dashboard");
+        // else if (response.data.message === "retailer") navigate("/dashboard_retailer");
+        // else navigate("/manufacture");
       }
     } catch (error) {
       console.error('Error during registration:', error);
@@ -192,7 +198,7 @@ const Login = () => {
             </select>
           )}
           <input
-          autocomplete="off"
+            autocomplete="off"
             type="text"
             placeholder="Name"
             name='name'
