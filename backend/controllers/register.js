@@ -25,7 +25,7 @@ const register = async (req, res) => {
                         sameSite: "strict",
                         maxAge: 1000 * 60 * 60 * 24,
                     });
-        return res.status(201).json({newManufacturer, message:"Manufacturer registered successfully"})
+        return res.status(201).json({newManufacturer, message:"manufacture"})
     }
     else if (type == "retailer") {
         const retailer = await Retailer.find({ email });
@@ -42,7 +42,7 @@ const register = async (req, res) => {
                         sameSite: "strict",
                         maxAge: 1000 * 60 * 60 * 24,
                     });
-        return res.status(201).json({newRetailer, message:"Retailer registered successfully"})
+        return res.status(201).json({newRetailer, message:"retailer"})
     }
     else if (type == "supplier") {
         const supplier = await Supplier.find({ email });
@@ -59,7 +59,7 @@ const register = async (req, res) => {
                         sameSite: "strict",
                         maxAge: 1000 * 60 * 60 * 24,
                     });
-        return res.status(201).json({newSupplier, message:"Supplier registered successfully"})
+        return res.status(201).json({newSupplier, message:"supplier"})
     }
     else {
         return res.status(400).json({message:"Invalid user type"})
