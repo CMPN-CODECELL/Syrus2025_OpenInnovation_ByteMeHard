@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 const Payment = () => {
     const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+    const [searchParams] = useSearchParams();
+    const quantity = searchParams.get('quantity');
+    const budget = searchParams.get('budget');
+    console.log('Quantity:', quantity, 'Budget:', budget);
 
     useEffect(() => {
         const loadRazorpayScript = () => {
@@ -31,7 +36,7 @@ const Payment = () => {
 
         try {
             // Fetch order from the backend
-            const { data } = await axios.post("http://localhost:8000/order", { amount: 500 });
+            const { data } = await axios.post("http://localhost:8000/order", { amount: budget });
             const { order_id, amount, currency, key } = data;
 
             console.log("Order Created:", data);
@@ -84,3 +89,4 @@ const Payment = () => {
 };
 
 export default Payment;
+

@@ -4,18 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, ChevronRight, ArrowUpRight, Bell, User } from 'lucide-react';
 import { Line, Bar } from 'react-chartjs-2';
-import { 
-  Chart, 
-  CategoryScale, 
-  LinearScale, 
-  PointElement, 
-  LineElement, 
-  BarElement, 
-  Title, 
-  Tooltip, 
-  Legend 
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
 } from 'chart.js';
-
+import axios from "axios"
+import Negotiate from './Negotiate';
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
 function DashboardRetailer() {
@@ -44,45 +45,89 @@ function DashboardRetailer() {
   const sidebarText = theme === 'dark' ? 'text-white' : 'text-black';
 
   // Dummy manufacturer data (for demonstration)
-  const manufacturers = [
-    {
-      id: 1,
-      name: 'Prime Furnishings',
-      details: 'Leading manufacturer of premium sofas with innovative designs and exceptional quality.',
-      price: '$500 per unit',
-      rating: '4.5',
-      contact: 'sales@primefurnishings.com',
-      phone: '123-456-7890',
-      address: '123 Industrial Rd, Metropolis, USA'
-    },
-    {
-      id: 2,
-      name: 'Urban Creations',
-      details: 'Modern designs with superior quality. Trusted by top retailers for their reliability.',
-      price: '$450 per unit',
-      rating: '4.2',
-      contact: 'info@urbancreations.com',
-      phone: '234-567-8901',
-      address: '456 Commerce St, Gotham, USA'
-    },
-    {
-      id: 3,
-      name: 'Classic Comforts',
-      details: 'Experienced manufacturer focused on durability and comfort. Traditional quality at competitive pricing.',
-      price: '$480 per unit',
-      rating: '4.7',
-      contact: 'support@classiccomforts.com',
-      phone: '345-678-9012',
-      address: '789 Trade Ave, Springfield, USA'
-    },
-  ];
+  // const manufacturers = [
+  //   {
+  //     id: 1,
+  //     name: 'Prime Furnishings',
+  //     details: 'Leading manufacturer of premium sofas with innovative designs and exceptional quality.',
+  //     price: '$500 per unit',
+  //     rating: '4.5',
+  //     contact: 'sales@primefurnishings.com',
+  //     phone: '123-456-7890',
+  //     address: '123 Industrial Rd, Metropolis, USA'
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Urban Creations',
+  //     details: 'Modern designs with superior quality. Trusted by top retailers for their reliability.',
+  //     price: '$450 per unit',
+  //     rating: '4.2',
+  //     contact: 'info@urbancreations.com',
+  //     phone: '234-567-8901',
+  //     address: '456 Commerce St, Gotham, USA'
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Classic Comforts',
+  //     details: 'Experienced manufacturer focused on durability and comfort. Traditional quality at competitive pricing.',
+  //     price: '$480 per unit',
+  //     rating: '4.7',
+  //     contact: 'support@classiccomforts.com',
+  //     phone: '345-678-9012',
+  //     address: '789 Trade Ave, Springfield, USA'
+  //   },
+  // ];
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log("Search Data:", { requirements, quantity, budget });
-    setSearchSubmitted(true);
+
+  const [manufacturers, useManufacturer] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+
+  const [showChat, setShowChat] = useState(false);
+  const handleNegotiate = (product) => {
+    console.log(product.manufacturer._id)
+    setSelectedProduct(product);
+    setSelectedManufacturer(null);
+    setShowChat(true);
   };
 
+
+  const getRetailerProduct = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/api/product/getproductbysearch`, {
+        params: {
+          requirements,
+          quantity: Number(quantity),
+          budget: Number(budget),
+        },
+        withCredentials: true, // If you need cookies
+      });
+
+      console.log("Products Found:", response.data.products);
+      useManufacturer(response.data.products);
+    } catch (error) {
+      alert("Error fetching products: " + (error.response?.data?.message || error.message));
+      console.error("Error fetching products:", error);
+      useManufacturer([]); // Clear on error
+    }
+  };
+
+
+
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    console.log("Search Data:", { requirements, quantity, budget });
+
+    if (!requirements || !quantity || !budget) {
+      alert("Please fill all fields before searching.");
+      return;
+    }
+
+    setSearchSubmitted(true);
+    await getRetailerProduct();
+  };
   return (
     <div className={`flex h-screen ${bgClass}`}>
       {/* Inline CSS for modal animations */}
@@ -131,19 +176,19 @@ function DashboardRetailer() {
           </h1>
         </div>
         <nav className="mt-8 px-4 space-y-2">
-          <a 
+          <a
             href="/dashboard_retailer"
             className={`block px-4 py-3 ${textClass} ${buttonHoverBg} rounded-lg transition-all duration-300 hover:scale-105`}
           >
             Dashboard
           </a>
-          <a 
+          <a
             href="/add_details"
             className={`block px-4 py-3 ${textClass} ${buttonHoverBg} rounded-lg transition-all duration-300 hover:scale-105`}
           >
             Add Details
           </a>
-          <a 
+          <a
             href="/logout"
             className={`block px-4 py-3 ${textClass} ${buttonHoverBg} rounded-lg transition-all duration-300 hover:scale-105`}
           >
@@ -153,8 +198,8 @@ function DashboardRetailer() {
       </div>
 
       {/* Mobile Menu Button for Sidebar */}
-      <button 
-        onClick={() => {}}
+      <button
+        onClick={() => { }}
         className={`md:hidden fixed top-4 left-4 z-40 p-2 ${bgClass} rounded-full shadow transition-shadow duration-300 border ${borderClass} hover:scale-110`}
       >
         <Menu className="w-6 h-6" style={{ color: theme === 'dark' ? '#FFFFFF' : '#000000' }} />
@@ -190,7 +235,7 @@ function DashboardRetailer() {
                   <input
                     type="text"
                     id="requirements"
-                    placeholder="Enter your requirements..."
+                    placeholder="Enter your required item"
                     value={requirements}
                     onChange={(e) => setRequirements(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none"
@@ -254,8 +299,8 @@ function DashboardRetailer() {
                 >
                   <h4 className="text-lg font-bold mb-2">{manufacturer.name}</h4>
                   <p className="text-sm mb-2">{manufacturer.details.substring(0, 50)}...</p>
-                  <p className="text-sm font-medium mb-1">Price: {manufacturer.price}</p>
-                  <p className="text-sm font-medium">Rating: {manufacturer.rating}</p>
+                  <p className="text-sm font-medium mb-1">Price: {manufacturer.max_price}</p>
+                  <p className="text-sm font-medium">Quantity: {manufacturer.quantity}</p>
                 </div>
               ))}
             </div>
@@ -269,33 +314,51 @@ function DashboardRetailer() {
               <h3 className="text-2xl font-bold mb-2">{selectedManufacturer.name}</h3>
               <p className="mb-4">{selectedManufacturer.details}</p>
               <div className="mb-4 space-y-2 text-sm">
-                <p><strong>Price:</strong> {selectedManufacturer.price}</p>
-                <p><strong>Rating:</strong> {selectedManufacturer.rating}</p>
-                <p><strong>Contact:</strong> {selectedManufacturer.contact}</p>
-                <p><strong>Phone:</strong> {selectedManufacturer.phone}</p>
-                <p><strong>Address:</strong> {selectedManufacturer.address}</p>
+                <p><strong>Price:</strong> {selectedManufacturer.max_price}</p>
+                <p><strong>Quantity:</strong> {selectedManufacturer.quantity}</p>
+                <p><strong>Contact:</strong> {selectedManufacturer.manufacturer.email}</p>
+                <p><strong>Phone:</strong> {selectedManufacturer.manufacturer.phone}</p>
+                <p><strong>Address:</strong> {selectedManufacturer.manufacturer.address}</p>
               </div>
               <div className="flex justify-end space-x-4">
-                <button 
-                  onClick={() => navigate('/negotiate')}
+                <button
+                  onClick={() => handleNegotiate(selectedManufacturer)}
                   className="px-6 py-2 rounded-full bg-blue-600 text-white transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 >
                   <ChevronRight className="w-4 h-4" /> Negotiate Price
                 </button>
-                <button 
+                <button
                   onClick={() => navigate('/checkout')}
                   className="px-6 py-2 rounded-full bg-green-600 text-white transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 >
                   Checkout
                 </button>
               </div>
-              <button 
+              <button
                 className="absolute top-2 right-2 text-2xl"
                 onClick={() => setSelectedManufacturer(null)}
               >
                 &times;
               </button>
             </div>
+          </div>
+        )}
+
+
+        {/* AI Chatbot */}
+        {showChat && selectedProduct && (
+          <div className="fixed bottom-4 right-4 w-96 h-[500px] bg-white rounded-lg shadow-xl">
+            <Negotiate
+              onClose={() => {
+                setShowChat(false);
+                setSelectedProduct(null);
+              }}
+              productId={selectedProduct._id}
+              initialPrice={selectedProduct.max_price}
+              minimumPrice={selectedProduct.min_price}
+              productName={selectedProduct.name}
+              retailerId={selectedProduct.manufacturer?._id || "1"}
+            />
           </div>
         )}
       </main>

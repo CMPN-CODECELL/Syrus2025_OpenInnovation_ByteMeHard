@@ -37,7 +37,7 @@ const negotiationSchema = new Schema({
   minimumPrice: {
     type: Number,
   },
-  previousString : {
+  previousPrompt : {
     type:String,
   },
   budget: {
