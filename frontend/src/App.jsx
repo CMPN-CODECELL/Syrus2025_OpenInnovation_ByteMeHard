@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/landingPage/LandingPage"; // Adjust path if needed
 import Dashboard from "./pages/Dashboard"; // Create this component
-import Producer from "./pages/Producer"; 
+import Producer from "./pages/Producer";
 import Retailer from "./pages/Retailer";
 import Login from "./pages/Login";
 import List_products from "./pages/List_products";
@@ -19,9 +19,8 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
-
         <Route path="/producer" element={<Producer />} />
-
+        <Route path="/payment" element={<Payment />} />
         <Route path="/retailer" element={<Retailer />} />
         <Route path="/list_products" element={<List_products />} />
         <Route path="/dashboard_retailer" element={<DashboardRetailer />} />

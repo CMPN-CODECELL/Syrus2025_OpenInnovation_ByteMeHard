@@ -80,7 +80,7 @@ function Retailer() {
           retailer?.imageUrl ||
           "https://plus.unsplash.com/premium_photo-1682147364229-f5faa0fd9bd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjZXIuLnJhdyUyMG1hdGVyaWFscyUyQ2Z1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D/150",
         cost: `$${retailer?.budget ?? 0}`,
-        quantity: `${retailer?.quantity ?? 0} units`,
+        : `${retailer?.quantity ?? 0} units`,
         phone: retailer?.retailerInfo?.phone || "N/A",
         status: retailer?.status || "Unknown",
       }));
@@ -215,7 +215,7 @@ function Retailer() {
                 </div>
                 <p className={`${textClass} text-sm`}>{retailer.details.substring(0, 50)}...</p>
                 <div className="mt-2">
-                  <span className={`text-sm font-medium ${textClass}`}>Deal: {retailer.dealAmount}</span>
+                  <span className={`text-sm font-medium ${textClass}`}>Deal: {retailer.cost}</span>
                 </div>
                 <div className="mt-2 space-y-1 text-sm">
                   <p><strong>Email:</strong> {retailer.contact}</p>
@@ -261,7 +261,7 @@ function Retailer() {
               <h3 className="text-2xl font-bold mb-2">{selectedRetailer.name}</h3>
               <p className="mb-4">{selectedRetailer.details}</p>
               <div className="mb-4 space-y-2 text-sm">
-                <p><strong>Deal Amount:</strong> {selectedRetailer.dealAmount}</p>
+                <p><strong>Deal Amount:</strong> {selectedRetailer.budget}</p>
                 <p><strong>Email:</strong> {selectedRetailer.contact}</p>
                 <p><strong>Phone:</strong> {selectedRetailer.phone}</p>
                 <p><strong>Address:</strong> {selectedRetailer.address}</p>

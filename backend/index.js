@@ -22,9 +22,13 @@ const cookieParser = require("cookie-parser");
 const Razorpay = require("razorpay");
 const getProducerRouter = require("./routes/get_producer_negotiation");
 const negogiationRetailerRouter = require("./routes/negiotiationRetailer");
+const axios = require("axios");
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
+const csv = require("csv-parser");
+const fs = require("fs");
+const ExcelJS = require("exceljs");
 
 // Database Connection
 connectDB();
@@ -80,19 +84,15 @@ console.log("Razorpay Key Secret:", process.env.KEY_SECRET);
 app.post('/order', async (req, res) => {
     try {
         const { amount } = req.body;
-
         if (!amount) {
             return res.status(400).json({ error: 'Amount is required' });
         }
-
         const options = {
             amount: amount * 100, // Razorpay works in paise
             currency: 'INR',
             receipt: `receipt_${Date.now()}`,
         };
-
         const order = await razorpay.orders.create(options);
-
         res.json({
             success: true,
             order_id: order.id,
@@ -134,6 +134,111 @@ app.post('/payment/verify', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+console.log("groq : ", GROQ_API_KEY);
+
+
+// Load CSV Data
+const loadCSVData = async () => {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      await workbook.csv.readFile("./Services.csv");
+  
+      const sheet = workbook.worksheets[0];
+      const services = [];
+  
+      sheet.eachRow((row, rowNumber) => {
+        if (rowNumber > 1) {
+          console.log("Row Data: ", row.values); // Inspect row structure
+          services.push({
+            name: row.getCell(2).value || "", // Ensure the correct column index
+            description: row.getCell(3).value || "",
+            cgstRate: row.getCell(4).value || "",
+            sgstRate: row.getCell(5).value || "",
+            igstRate: row.getCell(6).value || "",
+            condition: row.getCell(7).value || "",
+          });
+        }
+      });
+  
+      return services;
+    } catch (error) {
+      console.error("Error loading CSV data:", error.message);
+      return [];
+    }
+  };
+  
+  // Query Groq API
+  const queryGroq = async (userMessage, context) => {
+    try {
+      const response = await axios.post(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          model: "llama3-8b-8192",
+          messages: [
+            { role: "system", content: context },
+            { role: "user", content: userMessage },
+          ],
+          max_tokens: 300,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${GROQ_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      return response.data.choices[0]?.message?.content || "No response from AI.";
+    } catch (error) {
+      console.error("Error querying Groq:", error.message);
+      return "Sorry, I encountered an error.";
+    }
+  };
+  
+  // Chatbot Route
+  app.post("/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+  
+      if (!message) {
+        return res.status(400).json({ error: "Message is required." });
+      }
+  
+      const services = await loadCSVData();
+  
+      // Search in CSV Data
+      const matchedServices = services.filter((s) =>
+        s.name && message.toLowerCase().includes(s.name.toLowerCase())
+      );
+  
+      let context = "You are an assistant helping with **Government Subsidies and Tax Filing** in India.";
+  
+      if (matchedServices.length) {
+        context += "\n\n### 📊 **Relevant Subsidies:**\n";
+        matchedServices.forEach((s, index) => {
+          context += `\n**${index + 1}. ${s.name}**\n`;
+          context += `- **Description:** ${s.description}\n`;
+          context += `- **CGST Rate:** ${s.cgstRate}%\n`;
+          context += `- **SGST Rate:** ${s.sgstRate}%\n`;
+          context += `- **IGST Rate:** ${s.igstRate}%\n`;
+          context += `- **Condition:** ${s.condition || "None"}\n\n`;
+        });
+      } else {
+        context += "\n\n❓ **No matching subsidies found.** Ask about a specific subsidy or tax-related query.";
+      }
+  
+      const botResponse = await queryGroq(message, context);
+      res.json({ reply: botResponse });
+    } catch (error) {
+      console.error("Error in /chat route:", error.message);
+      res.status(500).json({ error: "Internal server error." });
+    }
+  });
+  
+  
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res

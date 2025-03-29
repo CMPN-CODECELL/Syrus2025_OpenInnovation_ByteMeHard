@@ -34,16 +34,31 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Handle login logic here
     console.log('Login data:', formData);
-    const response = await postRequest('/api/login', formData);
-    console.log("Response from login", response);
-    if (response) {
-      alert("Login successful");
-      navigate("/dashboard");
-      console.log("Login successful", response.data);
+
+    try {
+      const response = await postRequest('/api/login', formData);
+      console.log("Response from login", response);
+
+      if (response) {
+        alert("Login successful");
+        const message = response.message;
+
+        console.log("Role message:", message);
+
+        if (message == "manufacture") navigate("/dashboard");
+        else if (message == "retailer") navigate("/dashboard_retailer");
+        else if (message == "supplier") navigate("/dashboard_supplier");
+        else navigate("/dashboard");
+
+        console.log("Login successful", response.data);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login failed. Please check your credentials.");
     }
-  }
+  };
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -54,7 +69,9 @@ const Login = () => {
       const response = await postRequest('/api/register', formData);
       if (response) {
         alert("Registration successful");
-        navigate("/dashboard");
+        if (response.data.message === "manufacture") navigate("/dashboard");
+        else if (response.data.message === "retailer") navigate("/dashboard_retailer");
+        else navigate("/manufacture");
       }
     } catch (error) {
       console.error('Error during registration:', error);

@@ -8,6 +8,8 @@ const retailer = require("../models/retailer");
 
 const genAI = new GoogleGenerativeAI("AIzaSyB2_MywtpPEtPI8kNDpsWffWo_gRFpdVGA");
 
+
+
 negogiationRetailerRouter.post("/", async (req, res) => {
     let aiSuggestedPrice = null;
 
@@ -20,11 +22,14 @@ negogiationRetailerRouter.post("/", async (req, res) => {
             productName,
             initialPrice,
             minimumPrice,
+            maximumDiscount = 2, // Default max discount
             retailerId,
-            stage,
+            stage, 
+            previousPrompt,
         } = req.body;
 
-        // Validate required fields
+        console.log("req : body", req.body);
+
         if (
             !productId ||
             !message ||
@@ -54,6 +59,7 @@ negogiationRetailerRouter.post("/", async (req, res) => {
                 quantity,
                 messages: [{ role: "customer", content: message }],
                 status: "active",
+                previousPrompt
             });
             await negotiation.save();
         } else {
@@ -61,27 +67,26 @@ negogiationRetailerRouter.post("/", async (req, res) => {
             await negotiation.save();
         }
 
-        // Detect "deal done" or similar confirmation from customer
-        // const isDealDone =
-        //     /deal(?:\s+done| confirmed| ok| okay| agreed| final)/i.test(message);
 
-        // if (isDealDone) {
-        //     negotiation.status = "completed";
-        //     await negotiation.save();
-        //     return res.json({
-        //         message: "The deal is finalized. Thank you for your purchase!",
-        //         negotiationId: negotiation._id,
-        //         aiSuggestedPrice: aiSuggestedPrice || budget,
-        //     });
-        // }
+        if (message.toLowerCase().includes("deal done")) {
+          negotiation.status = "completed";
+          await negotiation.save();
+          console.log( negotiation.budget);
+          console.log( negotiation.status);
 
-        // Calculate price details
-        // Calculate price details
+          return res.json({
+              message: "confirmed",
+              negotiationId: negotiation._id,
+              budget: negotiation.budget,
+              status: negotiation.status,
+          });
+      }
+
         const totalBudget = parseFloat(budget);
         const totalInitialPrice = parseFloat(initialPrice) * parseInt(quantity, 10);
         const discountRequested = (
             ((totalInitialPrice - totalBudget) / totalInitialPrice) *
-            100
+            10
         ).toFixed(2);
         const pricePerUnit = (totalBudget / parseInt(quantity, 10)).toFixed(2);
 
@@ -97,6 +102,7 @@ negogiationRetailerRouter.post("/", async (req, res) => {
             Quantity requested: ${quantity} units
             Discount requested: ${discountRequested}%
             Minimum acceptable price: $${minimumPrice}
+            Previous Negogiation : ${previousPrompt}
 
             Customer message: "${message}"
 
@@ -149,6 +155,7 @@ negogiationRetailerRouter.post("/", async (req, res) => {
         }
 
         // Save AI response to negotiation
+        negotiation.previousPrompt = response;
         negotiation.messages.push({ role: "assistant", content: response });
         await negotiation.save();
 
@@ -205,4 +212,27 @@ negogiationRetailerRouter.get('/get/retailer', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+
+
+  
+// Get specific negotiation details for retailer
+negogiationRetailerRouter.get("/retailer/negotiations/:negotiationId", async (req, res) => {
+    try {
+        const negotiation = await NegotiationRetailer.findById(req.params.negotiationId)
+            .populate("productId", "name price images")
+            .populate("customerId", "name email");
+
+        if (!negotiation) {
+            console.log("negotiation not found");
+            return res.status(404).json({ error: "Negotiation not found" });
+        }
+
+        res.json(negotiation);
+    } catch (error) {
+        console.error("Error fetching negotiation details:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+
 module.exports = negogiationRetailerRouter;
