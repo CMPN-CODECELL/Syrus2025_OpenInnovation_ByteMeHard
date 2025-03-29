@@ -7,10 +7,8 @@ import Login from "./pages/Login";
 import List_products from "./pages/List_products";
 import DashboardRetailer from "./pages/Retailer_side/DashboardRetailer";
 import Negotiate from "./pages/Retailer_side/Negotiate";
-import DashboardProducer from "./pages/Producer_side/DashboardProducer";
-import ManufacturerRequests from "./pages/Producer_side/ManufacturerRequests";
-import Payment from "./pages/Payment";
-
+import Tax from "./pages/taxes/Tax";
+import Subsidy from "./pages/subsidies/Subsidy";
 
 
 export default function App() {
@@ -29,6 +27,8 @@ export default function App() {
         <Route path="/dashboard_producer" element={<DashboardProducer />} />
         <Route path="/manufacturer_requests" element={<ManufacturerRequests />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/tax" element={<Tax />} />
+        <Route path="/subsidy" element={<Subsidy />} />
 
 
 
