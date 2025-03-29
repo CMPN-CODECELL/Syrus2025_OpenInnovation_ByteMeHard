@@ -175,6 +175,7 @@ const Login = () => {
             </select>
           )}
           <input
+          autocomplete="off"
             type="text"
             placeholder="Name"
             name='name'
