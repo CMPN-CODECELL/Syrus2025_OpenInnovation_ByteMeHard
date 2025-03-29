@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Bell, User, ChevronRight } from 'lucide-react';
+import Payment from '../Payment';
 
 function DashboardProducer() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ function DashboardProducer() {
   // Handle Confirm Deal action (for now, we navigate to a confirmation page)
   const handleConfirmDeal = () => {
     console.log("Deal confirmed for:", selectedRawMaterial);
-    navigate('/confirm'); // Make sure this route is defined
+    navigate('/payment'); // Make sure this route is defined
   };
 
   return (

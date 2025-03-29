@@ -208,7 +208,7 @@ function ManufacturerRequests() {
                 Negotiate
               </button>
               <button 
-                onClick={() => navigate('/confirm')}
+                onClick={() => navigate('/payment')}
                 className="px-6 py-2 rounded-full bg-blue-600 text-white transition duration-300 hover:scale-105"
               >
                 Confirm Deal
