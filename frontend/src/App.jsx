@@ -9,6 +9,7 @@ import DashboardRetailer from "./pages/Retailer_side/DashboardRetailer";
 import Negotiate from "./pages/Retailer_side/Negotiate";
 import DashboardProducer from "./pages/Producer_side/DashboardProducer";
 import ManufacturerRequests from "./pages/Producer_side/ManufacturerRequests";
+import Payment from "./pages/Payment";
 
 
 
@@ -27,6 +28,8 @@ export default function App() {
         <Route path="/negotiate" element={<Negotiate />} />
         <Route path="/dashboard_producer" element={<DashboardProducer />} />
         <Route path="/manufacturer_requests" element={<ManufacturerRequests />} />
+        <Route path="/payment" element={<Payment />} />
+
 
 
 
