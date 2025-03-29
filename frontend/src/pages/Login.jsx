@@ -48,7 +48,7 @@ const Login = () => {
 
         if (message == "manufacture") navigate("/dashboard");
         else if (message == "retailer") navigate("/dashboard_retailer");
-        else if (message == "supplier") navigate("/dashboard_supplier");
+        else if (message == "supplier") navigate("/dashboard_producer");
         else navigate("/dashboard");
 
         console.log("Login successful", response.data);
@@ -192,6 +192,7 @@ const Login = () => {
             </select>
           )}
           <input
+          autocomplete="off"
             type="text"
             placeholder="Name"
             name='name'
