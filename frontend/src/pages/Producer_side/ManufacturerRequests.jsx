@@ -1,15 +1,37 @@
 // ManufacturerRequests.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getRequest } from '../../utils/api';
 
 function ManufacturerRequests() {
   const navigate = useNavigate();
   const [theme, setTheme] = useState('dark');
+  const [activeRequests, setActiveRequests] = useState([]);
+  const [completedRequests, setCompletedRequests] = useState([]);
+
+  const fetchManufacturerRequests = async () => {
+    try {
+      const response = await getRequest('/api/getmanufacturerrequest');
+      console.log("manufacturer requests", response);
+      if (response && response.length > 0) {
+        const active = response.filter(request => request.status === 'pending');
+        const completed = response.filter(request => request.status === 'completed');
+        setActiveRequests(active);
+        setCompletedRequests(completed);
+      }
+    }catch (error) {
+      console.error('Error fetching manufacturer requests:', error);
+    }
+  };
 
   // Load saved theme on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
+    fetchManufacturerRequests();
+    const interval = setInterval(fetchManufacturerRequests, 5000);
+    return () => clearInterval(interval);
+
   }, []);
 
   // Fixed black and white styling (except badges)
@@ -19,51 +41,51 @@ function ManufacturerRequests() {
   const buttonHoverBg = 'hover:bg-gray-200';
 
   // Dummy data for active and completed manufacturer requests
-  const activeRequests = [
-    {
-      id: 1,
-      orderFor: "Sofa Order",
-      priceOffered: "$450 per unit",
-      quantity: "100 units",
-      location: "Gotham, USA",
-      details: "Urgent order for modern sofas with a minimalist design.",
-    },
-    {
-      id: 2,
-      orderFor: "Chair Order",
-      priceOffered: "$120 per unit",
-      quantity: "200 units",
-      location: "Metropolis, USA",
-      details: "Request for ergonomic chairs with adjustable features.",
-    },
-    {
-      id: 3,
-      orderFor: "Lamp Order",
-      priceOffered: "$80 per unit",
-      quantity: "150 units",
-      location: "Smallville, USA",
-      details: "Completed order for modern desk lamps.",
-    },
-  ];
+  // const activeRequests = [
+  //   {
+  //     id: 1,
+  //     orderFor: "Sofa Order",
+  //     priceOffered: "$450 per unit",
+  //     quantity: "100 units",
+  //     location: "Gotham, USA",
+  //     details: "Urgent order for modern sofas with a minimalist design.",
+  //   },
+  //   {
+  //     id: 2,
+  //     orderFor: "Chair Order",
+  //     priceOffered: "$120 per unit",
+  //     quantity: "200 units",
+  //     location: "Metropolis, USA",
+  //     details: "Request for ergonomic chairs with adjustable features.",
+  //   },
+  //   {
+  //     id: 3,
+  //     orderFor: "Lamp Order",
+  //     priceOffered: "$80 per unit",
+  //     quantity: "150 units",
+  //     location: "Smallville, USA",
+  //     details: "Completed order for modern desk lamps.",
+  //   },
+  // ];
 
-  const completedRequests = [
-    {
-      id: 3,
-      orderFor: "Table Order",
-      priceOffered: "$300 per unit",
-      quantity: "50 units",
-      location: "Springfield, USA",
-      details: "Completed order for dining tables.",
-    },
-    {
-      id: 4,
-      orderFor: "Lamp Order",
-      priceOffered: "$80 per unit",
-      quantity: "150 units",
-      location: "Smallville, USA",
-      details: "Completed order for modern desk lamps.",
-    },
-  ];
+  // const completedRequests = [
+  //   {
+  //     id: 3,
+  //     orderFor: "Table Order",
+  //     priceOffered: "$300 per unit",
+  //     quantity: "50 units",
+  //     location: "Springfield, USA",
+  //     details: "Completed order for dining tables.",
+  //   },
+  //   {
+  //     id: 4,
+  //     orderFor: "Lamp Order",
+  //     priceOffered: "$80 per unit",
+  //     quantity: "150 units",
+  //     location: "Smallville, USA",
+  //     details: "Completed order for modern desk lamps.",
+  //   },
+  // ];
 
   // State for the selected request (to show in modal)
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -155,13 +177,13 @@ function ManufacturerRequests() {
                 className="p-4 border border-gray-300 rounded-lg shadow hover:shadow-lg transition duration-300 cursor-pointer bg-white text-black"
               >
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-bold">{request.orderFor}</h3>
+                  <h3 className="text-lg font-bold">{request.rawMaterial}</h3>
                   <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">Active</span>
                 </div>
-                <p className="mb-1"><strong>Price Offered:</strong> {request.priceOffered}</p>
-                <p className="mb-1"><strong>Quantity:</strong> {request.quantity}</p>
-                <p className="mb-1"><strong>Location:</strong> {request.location}</p>
-                <p className="text-sm">{request.details.substring(0, 50)}...</p>
+                <p className="mb-1"><strong>Price Offered:</strong> {request.proposedBudget}</p>
+                <p className="mb-1"><strong>Quantity:</strong> {request.requestedQuantity}</p>
+                {/* <p className="mb-1"><strong>Location:</strong> {request.location}</p> */}
+                {/* <p className="text-sm">{request.details}...</p> */}
               </div>
             ))}
           </div>
@@ -197,9 +219,9 @@ function ManufacturerRequests() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-2xl font-bold mb-2">{selectedRequest.orderFor}</h3>
             <p className="mb-4">{selectedRequest.details}</p>
-            <p className="mb-2"><strong>Price Offered:</strong> {selectedRequest.priceOffered}</p>
-            <p className="mb-2"><strong>Quantity:</strong> {selectedRequest.quantity}</p>
-            <p className="mb-2"><strong>Location:</strong> {selectedRequest.location}</p>
+            <p className="mb-2"><strong>Price Offered:</strong> {selectedRequest.proposedBudget}</p>
+            <p className="mb-2"><strong>Quantity:</strong> {selectedRequest.requestedQuantity}</p>
+            {/* <p className="mb-2"><strong>Location:</strong> {selectedRequest.location}</p> */}
             <div className="flex justify-end space-x-4">
               <button 
                 onClick={() => navigate('/negotiate')}
