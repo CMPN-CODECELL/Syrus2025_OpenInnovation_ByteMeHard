@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import CircularText from './CircularText';
 import Footer from './Footer';
 import ScrollVelocity from './ScrollVelocity';
+import price from './images/price.png';
 
 function LandingPage() {
     return (
@@ -23,6 +24,7 @@ function LandingPage() {
                     hoverFillColor="rgb(34, 34, 34)"
                     className="absolute inset-0"
                 />
+                <img src={price} alt="price" className="absolute top-20 left-12 ml-14 -translate-x-1/4 w-1/3 h-1/3" />
 
                 {/* Content Wrapper */}
                 <div className="relative flex items-center space-x-3">
